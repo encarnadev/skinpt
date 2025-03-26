@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 WEBHOOK_URL = os.getenv('DISCORD_WEBHOOK_URL')
-CURRENCY = "EUR"
 APP_ID = 252490  # Rust's App ID
 DESIRED_PROFIT_PERCENTAGE = 20  # Minimum profit percentage to consider a good deal
 
