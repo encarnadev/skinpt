@@ -88,7 +88,7 @@ def run_bot():
     try:
         client.run(
             app_id=APP_ID,
-            currency=CURRENCY,
+            currency=skinport.Currency.EUR,
             locale=skinport.Locale.en
         )
     except Exception as e:
