@@ -5,23 +5,21 @@ from config.config import (
     WEBHOOK_URL, 
     CURRENCY, 
     APP_ID, 
-    DESIRED_PROFIT_PERCENTAGE,
-    CLIENT_ID,
-    CLIENT_SECRET
+    DESIRED_PROFIT_PERCENTAGE
 )
 
 # Crear cliente de Skinport
-client = skinport.Client(
-    client_id=CLIENT_ID,
-    client_secret=CLIENT_SECRET
-)
+client = skinport.Client()
 
 @client.listen("saleFeed")
 async def on_sale_feed(data):
     salefeed = skinport.SaleFeed(data=data)
+    sales = salefeed.sales
+
+    print(f"Event Type: {salefeed.event_type}")
     
     if salefeed.event_type == "listed":
-        for sale in salefeed.sales:
+        for sale in sales:
             await process_sale(sale)
 
 @client.listen("maintenanceUpdated")
@@ -85,10 +83,14 @@ async def send_discord_notification(sale, suggested_price, sale_price, discount)
     except Exception as e:
         print(f"Error sending Discord notification: {e}")
 
-async def run_bot():
+def run_bot():
     """Run the Skinport bot"""
     try:
-        await client.start()
+        client.run(
+            app_id=APP_ID,
+            currency=CURRENCY,
+            locale=skinport.Locale.en
+        )
     except Exception as e:
         print(f"Error running bot: {e}")
         raise 
